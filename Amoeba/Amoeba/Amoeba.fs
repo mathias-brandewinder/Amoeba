@@ -3,6 +3,7 @@
 type Point = float []
 type Solution = float * Point
 type Objective = Point -> float
+type Domain = (float*float) []
 
 module Solver = 
 
@@ -14,13 +15,13 @@ module Solver =
 
     type Settings = { Alpha:float; Sigma:float; Gamma:float; Rho:float }
 
+    let Default = { Alpha=1.0; Sigma=0.5; Gamma=2.0; Rho=(-0.5) }
+
     let print (a:Amoeba) = 
         printfn "Amoeba state"
         a.Solutions 
         |> Seq.iter (fun (v,x) -> 
             printfn "  %.2f, %s" v (x |> Seq.map string |> String.concat ","))
-
-    let Default = { Alpha=1.0; Sigma=0.5; Gamma=2.0; Rho=(-0.5) }
 
     let evaluate (f:Objective) (x:Point) = f x, x
     let valueOf (s:Solution) = fst s
@@ -32,7 +33,8 @@ module Solver =
         { a with Solutions = a' |> Array.sortBy fst }
 
     let centroid (a:Amoeba) = 
-        [| for d in 0 .. (a.Dim - 1) -> (a.Solutions.[0..a.Size - 2] |> Seq.averageBy(fun (_,x) -> x.[d])) |]
+        [| for d in 0 .. (a.Dim - 1) -> 
+            (a.Solutions.[0..a.Size - 2] |> Seq.averageBy(fun (_,x) -> x.[d])) |]
 
     let stretch ((X,Y):Point*Point) (s:float) =
         Array.map2 (fun x y -> x + s * (x - y)) X Y
@@ -69,11 +71,15 @@ module Solver =
                 else
                     shrink a f s
 
-    let solve dim size settings f iter =
+    let initialize (d:Domain) (rng:System.Random) =
+        let dim = Array.length d
+        [| for (min,max) in d -> min + (max-min) * rng.NextDouble() |]
 
+    let solve domain size settings f iter =
+        let dim = Array.length domain
         let rng = System.Random()
-        let start = 
-            [| for i in 1 .. size -> [| for x in 1 .. dim -> rng.NextDouble() |] |]
+        let start =             
+            [| for i in 1 .. size -> initialize domain rng |]
             |> Array.map (evaluate f)
             |> Array.sortBy fst
         let amoeba = { Dim = dim; Solutions = start }
