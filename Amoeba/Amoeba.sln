@@ -1,0 +1,35 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Amoeba", "Amoeba\Amoeba.fsproj", "{511D359C-6DF7-4C55-9C19-5E7804420001}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Amoeba.Tests", "Amoeba.Tests\Amoeba.Tests.fsproj", "{A6EEEFC3-966F-4EE9-8857-D2B9EB81E274}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{A3028561-13A6-4EA9-968B-AB023C4A2D2A}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{511D359C-6DF7-4C55-9C19-5E7804420001}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{511D359C-6DF7-4C55-9C19-5E7804420001}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{511D359C-6DF7-4C55-9C19-5E7804420001}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{511D359C-6DF7-4C55-9C19-5E7804420001}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6EEEFC3-966F-4EE9-8857-D2B9EB81E274}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6EEEFC3-966F-4EE9-8857-D2B9EB81E274}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6EEEFC3-966F-4EE9-8857-D2B9EB81E274}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6EEEFC3-966F-4EE9-8857-D2B9EB81E274}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
