@@ -13,9 +13,9 @@ module Solver =
         member this.Best = this.Solutions.[0]
         member this.Worst = this.Solutions.[this.Size - 1]
 
-    type Settings = { Alpha:float; Sigma:float; Gamma:float; Rho:float }
+    type Settings = { Alpha:float; Sigma:float; Gamma:float; Rho:float; Size:int }
 
-    let Default = { Alpha=1.0; Sigma=0.5; Gamma=2.0; Rho=(-0.5) }
+    let Default = { Alpha=1.0; Sigma=0.5; Gamma=2.0; Rho=(-0.5); Size=3 }
 
     let print (a:Amoeba) = 
         printfn "Amoeba state"
@@ -75,11 +75,11 @@ module Solver =
         let dim = Array.length d
         [| for (min,max) in d -> min + (max-min) * rng.NextDouble() |]
 
-    let solve domain size settings f iter =
+    let solve settings domain f iter =
         let dim = Array.length domain
         let rng = System.Random()
         let start =             
-            [| for i in 1 .. size -> initialize domain rng |]
+            [| for i in 1 .. settings.Size -> initialize domain rng |]
             |> Array.map (evaluate f)
             |> Array.sortBy fst
         let amoeba = { Dim = dim; Solutions = start }
