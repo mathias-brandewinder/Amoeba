@@ -30,5 +30,5 @@ let schwefelTest () =
     let s (x:float) = -x * sin(sqrt(abs(x)))
     let f (p:Point) = p |> Array.sumBy s
 
-    let iter = 100
+    let iter = 1000
     solve 2 3 Default f iter

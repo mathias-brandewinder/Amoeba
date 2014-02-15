@@ -34,43 +34,40 @@ module Solver =
     let centroid (a:Amoeba) = 
         [| for d in 0 .. (a.Dim - 1) -> (a.Solutions.[0..a.Size - 2] |> Seq.averageBy(fun (_,x) -> x.[d])) |]
 
-    let transform (c:Point) (x:Point) (s:float) =
-        Array.map2 (fun c x -> c + s * (c - x)) c x
+    let stretch ((X,Y):Point*Point) (s:float) =
+        Array.map2 (fun x y -> x + s * (x - y)) X Y
 
-    let reflected (c:Point) (x:Point) alpha =
-        Array.map2 (fun c x -> c + alpha * (c - x)) c x
+    let reflected V s = stretch V s.Alpha
 
-    let expanded (c:Point) (x:Point) gamma =
-        Array.map2 (fun c x -> c + gamma * (c - x)) c x
+    let expanded V s = stretch V s.Gamma
 
-    let contracted (c:Point) (x:Point) rho =
-        Array.map2 (fun c x -> c + rho * (c - x)) c x
+    let contracted V s = stretch V s.Rho
 
-    let shrink (a:Amoeba) (f:Objective) sigma =
-        let best = snd a.Solutions.[0]
+    let shrink (a:Amoeba) (f:Objective) s =
+        let best = snd a.Best
         { a with Solutions =         
                     a.Solutions 
-                    |> Array.map (fun p -> Array.map2 (fun x b -> b + sigma * (x - b)) (snd p) best)
+                    |> Array.map (fun p -> stretch (best,snd p) -s.Sigma)
                     |> Array.map (evaluate f) } 
 
     let update (a:Amoeba) (f:Objective) (s:Settings) =
         let cen = centroid a
-        let rv,r = reflected cen (snd a.Worst) s.Alpha |> evaluate f
+        let rv,r = reflected (cen, (snd a.Worst)) s |> evaluate f
         if ((valueOf (a.Best) <= rv) && (rv < (valueOf (a.Solutions.[a.Size - 2])))) then
             replace a (rv,r)
         else
             if (rv < valueOf (a.Best)) then
-                let ev,e = expanded cen r s.Gamma |> evaluate f
+                let ev,e = expanded (cen, r) s |> evaluate f
                 if (ev < rv) then
                     replace a (ev,e)
                 else
                     replace a (rv,r)
             else
-                let (cv,c) = contracted cen (snd a.Worst) s.Rho |> evaluate f
+                let (cv,c) = contracted (cen, (snd a.Worst)) s |> evaluate f
                 if (cv < valueOf (a.Worst)) then
                     replace a (cv,c)
                 else
-                    shrink a f s.Sigma
+                    shrink a f s
 
     let solve dim size settings f iter =
 

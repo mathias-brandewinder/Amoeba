@@ -39,21 +39,21 @@ module ``Amoeba solver tests`` =
         
         let centroid = [| 0.; 1.; |]
         let x        = [| 4.; 3.; |]
-        reflected centroid x Default.Alpha |> should equal [| -4.; -1. |]
+        reflected (centroid, x) Default |> should equal [| -4.; -1. |]
 
     [<Test>]
     let ``Expanded validation`` () =
         
         let centroid = [| 0.; 1.; |]
         let x        = [| 4.; 3.; |]
-        expanded centroid x Default.Gamma |> should equal [| -8.; -3. |]
+        expanded (centroid, x) Default |> should equal [| -8.; -3. |]
 
     [<Test>]
     let ``Contracted validation`` () =
         
         let centroid = [| 0.; 1.; |]
         let x        = [| 4.; 3.; |]
-        contracted centroid x Default.Rho |> should equal [| 2.; 2. |]
+        contracted (centroid, x) Default |> should equal [| 2.; 2. |]
 
     [<Test>]
     let ``Shrink validation`` () =
@@ -61,7 +61,7 @@ module ``Amoeba solver tests`` =
         let amoeba = testAmoeba ()
         let f (p:Point) = 42.
 
-        let updated = shrink amoeba f Default.Sigma
+        let updated = shrink amoeba f Default
 
         snd updated.Solutions.[0] |> should equal (snd amoeba.Solutions.[0])
         snd updated.Solutions.[1] |> should equal [| 1.; 3.; |]
